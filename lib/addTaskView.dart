@@ -2,13 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'dailyView.dart';
 import 'main.dart';
 
 
 class AddTaskView extends StatefulWidget {
-  AddTaskView({Key key, this.events}) : super(key: key);
+  AddTaskView({Key key, this.events, this.tasks}) : super(key: key);
 
   final List<Event> events;
+  final List<Meeting> tasks;
 
   @override
   _AddTaskView createState() => _AddTaskView();
@@ -30,23 +32,23 @@ class _AddTaskView extends State<AddTaskView> {
     Future<DateTime> getDate() {
       return showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
+        initialDate: DateTime(startDate.year, startDate.month, startDate.day, 9, 0, 0),
         firstDate: DateTime(1900),
         lastDate: DateTime.now().add(new Duration(days: 365)),
         initialEntryMode: DatePickerEntryMode.input,
       );
     }
 
-    void callDatePicker(DateTime dateTime) async {
-      var order = await getDate();
-      if(order != null) {
-        if(dateTime == startDate) {
+    void callDatePicker(String dateTime) async {
+      var pickDate = await getDate();
+      if(pickDate != null) {
+        if(dateTime == "startDate") {
           setState(() {
-            startDate = order;
+            startDate = pickDate;
           });
         } else {
           setState(() {
-            dueDate = order;
+            dueDate = pickDate;
           });
         }
       }
@@ -74,26 +76,54 @@ class _AddTaskView extends State<AddTaskView> {
                 hintText: DateFormat('MM/dd/yyyy').format(dateTime)
             ),
             onTap: () {
-              callDatePicker(dateTime);
+              callDatePicker(hint);
             }
           )
       );
     }
 
     void addTask() {
+      //TODO: Fix rounding to nearest half hour, fix double appearance bug and no appearance bug, wrong date bug
       var availableDays = dueDate.difference(startDate);
       for(int i = 0; i < availableDays.inDays + 1; i++) {
         widget.events.add(new Event(
-          date: startDate.add(new Duration(days: i)),
+          date: DateTime(startDate.year, startDate.month, startDate.day, 9, 0, 0).add(new Duration(days: i)),
           className: className.text,
           taskName: taskName.text,
           hours: int.parse(hoursToComplete.text)/availableDays.inDays,
           complete: false,
         ));
       }
+      double hoursDouble = double.parse(hoursToComplete.text)/availableDays.inDays;
+      int hours = hoursDouble.round();
+
+      var list = [const Color.fromRGBO(238, 175, 175,1),const Color.fromRGBO(175, 238, 175, 1),const Color.fromRGBO(175, 238, 238, 1),const Color.fromRGBO(192, 192, 192, 1),const Color.fromRGBO(238, 175, 238, 1)];
+
+      var color = (list..shuffle()).first;
+
+      for(int i = 0; i < availableDays.inDays + 1; i++) {
+        DateTime day = DateTime(startDate.year, startDate.month, startDate.day, 9, 0, 0).add(new Duration(days: i));
+        widget.tasks.add(new Meeting( className.text + " " + taskName.text,
+          day,
+          day.add(new Duration(hours: hours)),
+            color,
+          false,
+          hours
+        //     String eventName;
+        // DateTime from;
+        // DateTime to;
+        // Color background;
+        //     bool isAllDay;
+        ));
+      }
       setState(() {});
       print(widget.events.length);
+      print(widget.tasks.length);
+      print("hi");
+
       Navigator.pop(context, widget.events);
+      Navigator.pop(context, widget.tasks);
+
     }
 
 
@@ -107,8 +137,8 @@ class _AddTaskView extends State<AddTaskView> {
           children: <Widget>[
             getTextField(className, "Class..."),
             getTextField(taskName, "Task Name..."),
-            getDateField(startDate, "---"),
-            getDateField(dueDate, "---"),
+            getDateField(startDate, "startDate"),
+            getDateField(dueDate, "endDate"),
             getTextField(hoursToComplete, "Hours to Complete...")
             ],
       ),

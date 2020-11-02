@@ -2,21 +2,65 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'main.dart';
 
 
 class DailyView extends StatefulWidget {
-  DailyView({Key key, this.title, this.events}) : super(key: key);
+  DailyView({Key key, this.title, this.events, this.tasks}) : super(key: key);
 
   final String title;
   List<Event> events;
+  List<Meeting> tasks; 
 
   DateTime date = DateTime.now();
 
   @override
   _DailyViewState createState() => _DailyViewState();
 }
+
+class Meeting {
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay, this.duration);
+
+  String eventName;
+  DateTime from;
+  DateTime to;
+  Color background;
+  bool isAllDay;
+  int duration;
+}
+class MeetingDataSource extends CalendarDataSource {
+  MeetingDataSource(List<Meeting> source){
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    return appointments[index].from;
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    return appointments[index].to;
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments[index].eventName;
+  }
+
+  @override
+  Color getColor(int index) {
+    return appointments[index].background;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    return appointments[index].isAllDay;
+  }
+}
+
 
 class _DailyViewState extends State<DailyView> {
   int _counter = 0;
@@ -33,18 +77,38 @@ class _DailyViewState extends State<DailyView> {
     });
   }
 
+
   void addRandomTask() {
     setState(() {
-      widget.events.add(
-          new Event(
-            date: widget.date,
-            className: "className.text",
-            taskName: "taskName.text",
-            hours: 1.5,
-            complete: false,
+      final DateTime startTime =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 9, 0, 0);
+      final DateTime endTime = startTime.add(const Duration(hours: 2));
+
+      widget.tasks.add(
+          new Meeting(
+              "Conference", startTime, startTime.add(const Duration(hours: 2)), const Color(0xFF0F8644), false , 2
           )
       );
     });
+  }
+  List<Meeting> _getDataSource() {
+    var meetings = <Meeting>[];
+    final DateTime today = DateTime.now();
+    final DateTime startTime =
+    DateTime(today.year, today.month, today.day, 9, 0, 0);
+    final DateTime endTime = startTime.add(const Duration(hours: 2));
+    var map = {};
+    for (int i = 0 ; i<widget.tasks.length;i++) {
+      map.putIfAbsent(widget.tasks[i].from.day, () => 0);
+      int offset = map[widget.tasks[i].from.day];
+      int duration = widget.tasks[i].duration;
+      print(duration);
+      print("duration");
+      meetings.add(new Meeting(widget.tasks[i].eventName, widget.tasks[i].from.add(Duration(hours: offset )), widget.tasks[i].to.add(Duration(hours: offset)), widget.tasks[i].background, widget.tasks[i].isAllDay, duration));
+      map[widget.tasks[i].from.day] = map[widget.tasks[i].from.day] + widget.tasks[i].duration;
+      //print(meetings.length);
+    }
+    return meetings;
   }
 
   @override
@@ -118,7 +182,7 @@ class _DailyViewState extends State<DailyView> {
                 ),
                 onTap: () => {
                   setState(() {
-                    e.complete = true;
+                    e.complete = !e.complete;
                   })
                 },
               )
@@ -135,11 +199,19 @@ class _DailyViewState extends State<DailyView> {
           toolbarHeight: 68.0,
         ),
         body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: buildEvents(),
-            ),
+          child: SfCalendar(
+            dataSource: MeetingDataSource(_getDataSource()),
+            showNavigationArrow: true,
+            timeSlotViewSettings: TimeSlotViewSettings(timeIntervalHeight: 100,),
+            appointmentTextStyle: TextStyle(
+                fontSize: 25,
+                color: Color.fromRGBO(255,255,255,1),
+                letterSpacing: 3,
+                fontWeight: FontWeight.bold),
+            // child: Column(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: buildEvents(),
+            // ),
           )
         ),
         drawer: menuDrawer,
@@ -178,3 +250,4 @@ class _DailyViewState extends State<DailyView> {
     );
   }
 }
+
