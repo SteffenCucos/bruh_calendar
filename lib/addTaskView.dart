@@ -90,14 +90,14 @@ class _AddTaskView extends State<AddTaskView> {
           date: DateTime(startDate.year, startDate.month, startDate.day, 9, 0, 0).add(new Duration(days: i)),
           className: className.text,
           taskName: taskName.text,
-          hours: int.parse(hoursToComplete.text)/availableDays.inDays,
+          hours: int.parse(hoursToComplete.text)/(availableDays.inDays + 1),
           complete: false,
         ));
       }
-      double hoursDouble = double.parse(hoursToComplete.text)/availableDays.inDays;
+      double hoursDouble = double.parse(hoursToComplete.text)/(availableDays.inDays + 1);
       int hours = hoursDouble.round();
 
-      var list = [const Color.fromRGBO(238, 175, 175,1),const Color.fromRGBO(175, 238, 175, 1),const Color.fromRGBO(175, 238, 238, 1),const Color.fromRGBO(192, 192, 192, 1),const Color.fromRGBO(238, 175, 238, 1)];
+      var list = [const Color.fromRGBO(25, 94, 131,1),const Color.fromRGBO(224, 123, 57, 1),const Color.fromRGBO(150, 50, 168, 1),const Color.fromRGBO(50, 168, 78, 1)];
 
       var color = (list..shuffle()).first;
 

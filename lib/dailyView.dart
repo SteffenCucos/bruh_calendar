@@ -127,10 +127,10 @@ class _DailyViewState extends State<DailyView> {
       if (widget.tasks[i].complete){
         print("clear");
         widget.tasks[i].background = widget.tasks[i].background.withOpacity(0.5);
-        eventName+="✔";
+        eventName+=" (Complete)";
       } else{
         print("opaque");
-        widget.tasks[i].background = widget.tasks[i].background.withOpacity(1);
+        widget.tasks[i].background = widget.tasks[i].background.withOpacity(0.9);
       }
       meetings.add(new Meeting(eventName, widget.tasks[i].from.add(Duration(hours: offset )), widget.tasks[i].to.add(Duration(hours: offset)), widget.tasks[i].background, widget.tasks[i].isAllDay, duration, widget.tasks[i].complete, widget.tasks[i].hashValue));
       map[widget.tasks[i].from.day] = map[widget.tasks[i].from.day] + widget.tasks[i].duration;
