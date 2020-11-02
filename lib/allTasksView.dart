@@ -2,13 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'dailyView.dart';
 import 'main.dart';
 
 
 class AllTasksView extends StatefulWidget {
-  AllTasksView({Key key, this.events}) : super(key: key);
+  AllTasksView({Key key, this.events, this.tasks}) : super(key: key);
 
   final List<Event> events;
+  final List<Meeting> tasks;
 
   @override
   _AllTasksView createState() => _AllTasksView();
@@ -25,8 +27,8 @@ class _AllTasksView extends State<AllTasksView> {
 
     var taskMap = new Map();
 
-    for(Event e in widget.events) {
-      String key = e.className + " " + e.taskName;
+    for(Meeting e in widget.tasks) {
+      String key = e.eventName;
 
       if(!taskMap.containsKey(key)) {
         taskMap[key] = new Map();
@@ -34,9 +36,9 @@ class _AllTasksView extends State<AllTasksView> {
         taskMap[key]["completedHours"] = 0;
       }
 
-      taskMap[key]["totalHours"] += e.hours;
+      taskMap[key]["totalHours"] += e.duration;
       if(e.complete) {
-        taskMap[key]["completedHours"] += e.hours;
+        taskMap[key]["completedHours"] += e.duration;
       }
     }
 

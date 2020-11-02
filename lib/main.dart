@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
     // DateTime(today.year, today.month, today.day, 9, 0, 0);
     // final DateTime endTime = startTime.add(const Duration(hours: 2));
     // meetings.add(
-    new Meeting('Conference', DateTime(startDate.year, startDate.month, startDate.day, 9, 0, 0), DateTime(startDate.year, startDate.month, startDate.day, 11, 0, 0), const Color.fromRGBO(255, 0, 0, 1), false, 2)
+    new Meeting('Conference', DateTime(startDate.year, startDate.month, startDate.day, 9, 0, 0), DateTime(startDate.year, startDate.month, startDate.day, 11, 0, 0), const Color.fromRGBO(220,20,60, 1), false, 2,false, this.hashCode)
     ];
 
     return MaterialApp(
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         '/DailyView' : (BuildContext context) => DailyView(title: "Title String", events: events),
         '/SettingsView' : (BuildContext context) => SettingsView(),
         '/AddTaskView' : (BuildContext context) => AddTaskView(events: events, tasks: tasks),
-        '/AllTasksView' : (BuildContext context) => AllTasksView(events: events),
+        '/AllTasksView' : (BuildContext context) => AllTasksView(events: events, tasks: tasks),
       },
     );
   }

@@ -21,7 +21,7 @@ class DailyView extends StatefulWidget {
 }
 
 class Meeting {
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay, this.duration);
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay, this.duration, this.complete, this.hashValue);
 
   String eventName;
   DateTime from;
@@ -29,6 +29,8 @@ class Meeting {
   Color background;
   bool isAllDay;
   int duration;
+  bool complete;
+  int hashValue;
 }
 class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(List<Meeting> source){
@@ -86,10 +88,27 @@ class _DailyViewState extends State<DailyView> {
 
       widget.tasks.add(
           new Meeting(
-              "Conference", startTime, startTime.add(const Duration(hours: 2)), const Color(0xFF0F8644), false , 2
+              "Conference", startTime, startTime.add(const Duration(hours: 2)), const Color(0xFF0F8644), false , 2 , false, widget.tasks.hashCode
           )
       );
     });
+  }
+  void calendarTapped(CalendarTapDetails details){
+    if (details.targetElement == CalendarElement.appointment) {
+      DateTime dateTime = details.date;
+      List<Meeting> appointments = details.appointments.cast<Meeting>();
+      print(appointments.length);
+      Meeting appointment = appointments[0];
+      for (Meeting e in widget.tasks){
+        print(appointment.hashValue);
+        print(e.hashValue);
+        if (e.hashValue == appointment.hashValue){
+          print(e.complete);
+          e.complete = !e.complete;
+        }
+      }
+      setState(() {});
+    }
   }
   List<Meeting> _getDataSource() {
     var meetings = <Meeting>[];
@@ -104,7 +123,16 @@ class _DailyViewState extends State<DailyView> {
       int duration = widget.tasks[i].duration;
       print(duration);
       print("duration");
-      meetings.add(new Meeting(widget.tasks[i].eventName, widget.tasks[i].from.add(Duration(hours: offset )), widget.tasks[i].to.add(Duration(hours: offset)), widget.tasks[i].background, widget.tasks[i].isAllDay, duration));
+      String eventName = widget.tasks[i].eventName;
+      if (widget.tasks[i].complete){
+        print("clear");
+        widget.tasks[i].background = widget.tasks[i].background.withOpacity(0.5);
+        eventName+="✔";
+      } else{
+        print("opaque");
+        widget.tasks[i].background = widget.tasks[i].background.withOpacity(1);
+      }
+      meetings.add(new Meeting(eventName, widget.tasks[i].from.add(Duration(hours: offset )), widget.tasks[i].to.add(Duration(hours: offset)), widget.tasks[i].background, widget.tasks[i].isAllDay, duration, widget.tasks[i].complete, widget.tasks[i].hashValue));
       map[widget.tasks[i].from.day] = map[widget.tasks[i].from.day] + widget.tasks[i].duration;
       //print(meetings.length);
     }
@@ -195,8 +223,8 @@ class _DailyViewState extends State<DailyView> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(DateFormat('MM/dd/yyyy').format(widget.date)),
-          toolbarHeight: 68.0,
+          title: Text("Daily View"),
+          toolbarHeight: 60.0,
         ),
         body: Center(
           child: SfCalendar(
@@ -208,6 +236,8 @@ class _DailyViewState extends State<DailyView> {
                 color: Color.fromRGBO(255,255,255,1),
                 letterSpacing: 3,
                 fontWeight: FontWeight.bold),
+            onTap: calendarTapped,
+
             // child: Column(
             //   mainAxisAlignment: MainAxisAlignment.center,
             //   children: buildEvents(),
@@ -218,15 +248,15 @@ class _DailyViewState extends State<DailyView> {
         bottomSheet: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding : const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child : FloatingActionButton(
-                heroTag: 'btn2',
-                onPressed: () => incrementDate(-1),
-                tooltip: 'Left',
-                child: Icon(Icons.arrow_left),
-              ),
-            ),
+            // Container(
+            //   padding : const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            //   child : FloatingActionButton(
+            //     heroTag: 'btn2',
+            //     onPressed: () => incrementDate(-1),
+            //     tooltip: 'Left',
+            //     child: Icon(Icons.arrow_left),
+            //   ),
+            // ),
             Container(
               padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 10.0),
               child: FloatingActionButton(
@@ -236,15 +266,15 @@ class _DailyViewState extends State<DailyView> {
                 child: Icon(Icons.add),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 10.0),
-              child: FloatingActionButton(
-                heroTag: 'btn3',
-                onPressed: () => incrementDate(1),
-                tooltip: 'Right',
-                child: Icon(Icons.arrow_right),
-              ),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 10.0),
+            //   child: FloatingActionButton(
+            //     heroTag: 'btn3',
+            //     onPressed: () => incrementDate(1),
+            //     tooltip: 'Right',
+            //     child: Icon(Icons.arrow_right),
+            //   ),
+            // ),
           ]
         )
     );

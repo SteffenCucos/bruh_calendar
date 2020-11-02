@@ -108,7 +108,9 @@ class _AddTaskView extends State<AddTaskView> {
           day.add(new Duration(hours: hours)),
             color,
           false,
-          hours
+          hours,
+        false,
+        this.hashCode+i
         //     String eventName;
         // DateTime from;
         // DateTime to;
