@@ -38,6 +38,16 @@ class MyApp extends StatelessWidget {
 
 
     ];
+    DateTime startDate = DateTime.now();
+    List <Meeting> tasks = [
+    // var meetings = <Meeting>[];
+    // final DateTime today = DateTime.now();
+    // final DateTime startTime =
+    // DateTime(today.year, today.month, today.day, 9, 0, 0);
+    // final DateTime endTime = startTime.add(const Duration(hours: 2));
+    // meetings.add(
+    new Meeting('Conference', DateTime(startDate.year, startDate.month, startDate.day, 9, 0, 0), DateTime(startDate.year, startDate.month, startDate.day, 11, 0, 0), const Color.fromRGBO(220,20,60, 1), false, 2,false, this.hashCode)
+    ];
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -45,12 +55,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: DailyView(title: "Title String", events: events),
+      home: DailyView(title: "Title String", events: events, tasks: tasks,),
       routes: <String, WidgetBuilder> {
         '/DailyView' : (BuildContext context) => DailyView(title: "Title String", events: events),
         '/SettingsView' : (BuildContext context) => SettingsView(),
-        '/AddTaskView' : (BuildContext context) => AddTaskView(events: events),
-        '/AllTasksView' : (BuildContext context) => AllTasksView(events: events),
+        '/AddTaskView' : (BuildContext context) => AddTaskView(events: events, tasks: tasks),
+        '/AllTasksView' : (BuildContext context) => AllTasksView(events: events, tasks: tasks),
       },
     );
   }
