@@ -225,6 +225,30 @@ class _DailyViewState extends State<DailyView> {
         appBar: AppBar(
           title: Text("Daily View"),
           toolbarHeight: 60.0,
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              //onSelected: Navigator.pushNamed();
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: "DailyView",
+                  child: Text('Daily View'),
+
+                ),
+                const PopupMenuItem<String>(
+                  value: "WeeklyView",
+                  child: Text('Weekly View'),
+                ),
+                const PopupMenuItem<String>(
+                  value: "MonthlyView",
+                  child: Text('Monthly View'),
+                ),
+                const PopupMenuItem<String>(
+                  value: "YearlyView",
+                  child: Text('Semester View'),
+                ),
+              ],
+            )
+          ]
         ),
         body: Center(
           child: SfCalendar(
@@ -246,6 +270,12 @@ class _DailyViewState extends State<DailyView> {
           )
         ),
         drawer: menuDrawer,
+
+        floatingActionButton: FloatingActionButton(
+          //onPressed: () => (),
+          tooltip: 'Switch view',
+          child: Icon(Icons.calendar_today),
+        ),
         bottomSheet: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
