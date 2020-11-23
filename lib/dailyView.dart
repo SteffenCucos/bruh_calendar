@@ -149,7 +149,7 @@ class _DailyViewState extends State<DailyView> {
           Container(
             height: 100.0,
             child: DrawerHeader(
-              child: Text('Menu Drawer'),
+              child: Text('Menu'),
               decoration: BoxDecoration(
                 color: Colors.green,
               ),
@@ -157,7 +157,7 @@ class _DailyViewState extends State<DailyView> {
           ),
           ListTile(
             title: Text('Settings'),
-            leading: Icon(Icons.ac_unit),
+            leading: Icon(Icons.settings),
             onTap: () {
               // TODO: Update App State
               //Navigator.pushNamed(context, '/Settings');
@@ -165,7 +165,7 @@ class _DailyViewState extends State<DailyView> {
           ),
           ListTile(
             title: Text('Add Task'),
-            leading: Icon(Icons.person),
+            leading: Icon(Icons.add),
             onTap: () async {
                 await Navigator.pushNamed(context, '/AddTaskView');
                 setState(() {});
@@ -173,7 +173,7 @@ class _DailyViewState extends State<DailyView> {
           ),
           ListTile(
             title: Text('All Tasks'),
-            leading: Icon(Icons.ac_unit),
+            leading: Icon(Icons.folder),
             onTap: () {
               // TODO: Update App State
               Navigator.pushNamed(context, '/AllTasksView');
@@ -225,11 +225,36 @@ class _DailyViewState extends State<DailyView> {
         appBar: AppBar(
           title: Text("Daily View"),
           toolbarHeight: 60.0,
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              //onSelected: Navigator.pushNamed();
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: "DailyView",
+                  child: Text('Daily View'),
+
+                ),
+                const PopupMenuItem<String>(
+                  value: "WeeklyView",
+                  child: Text('Weekly View'),
+                ),
+                const PopupMenuItem<String>(
+                  value: "MonthlyView",
+                  child: Text('Monthly View'),
+                ),
+                const PopupMenuItem<String>(
+                  value: "YearlyView",
+                  child: Text('Semester View'),
+                ),
+              ],
+            )
+          ]
         ),
         body: Center(
           child: SfCalendar(
             dataSource: MeetingDataSource(_getDataSource()),
             showNavigationArrow: true,
+            //view: CalendarView.workWeek,
             timeSlotViewSettings: TimeSlotViewSettings(timeIntervalHeight: 100,),
             appointmentTextStyle: TextStyle(
                 fontSize: 25,
@@ -245,6 +270,12 @@ class _DailyViewState extends State<DailyView> {
           )
         ),
         drawer: menuDrawer,
+
+        floatingActionButton: FloatingActionButton(
+          //onPressed: () => (),
+          tooltip: 'Switch view',
+          child: Icon(Icons.calendar_today),
+        ),
         bottomSheet: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -257,15 +288,15 @@ class _DailyViewState extends State<DailyView> {
             //     child: Icon(Icons.arrow_left),
             //   ),
             // ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 10.0),
-              child: FloatingActionButton(
-                heroTag: 'btn1',
-                onPressed: addRandomTask,
-                tooltip: 'Increment',
-                child: Icon(Icons.add),
-              ),
-            ),
+//            Container(
+//              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 10.0),
+//              child: FloatingActionButton(
+//                heroTag: 'btn1',
+//                onPressed: addRandomTask,
+//                tooltip: 'Increment',
+//                child: Icon(Icons.add),
+              //),
+          //  ),
             // Container(
             //   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 10.0),
             //   child: FloatingActionButton(

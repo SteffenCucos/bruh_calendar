@@ -119,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
         body: SfCalendar(
-          view: CalendarView.day,
+          view: CalendarView.month,
           dataSource: MeetingDataSource(_getDataSource()),
         ));
   }
