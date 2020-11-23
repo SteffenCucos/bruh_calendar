@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 import 'dailyView.dart';
 import 'main.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+
 
 
 class AllTasksView extends StatefulWidget {
@@ -59,7 +61,14 @@ class _AllTasksView extends State<AllTasksView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(key),
-                LinearProgressIndicator(value: percent),
+                //LinearProgressIndicator(value: percent),
+                new CircularPercentIndicator(
+                  radius: 200.0,
+                  lineWidth: 6.0,
+                  percent: percent,
+                  center: new Text((percent*100).floor().toString() + "%"),
+                  progressColor: Colors.green,
+                )
               ],
             ),
           )
