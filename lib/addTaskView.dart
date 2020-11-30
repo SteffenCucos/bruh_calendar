@@ -122,9 +122,8 @@ class _AddTaskView extends State<AddTaskView> {
       print(widget.events.length);
       print(widget.tasks.length);
       print("hi");
-
       Navigator.pop(context, widget.events);
-      Navigator.pop(context, widget.tasks);
+      //Navigator.pop(context, widget.tasks);
 
     }
 
