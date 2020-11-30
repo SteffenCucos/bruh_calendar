@@ -156,14 +156,6 @@ class _DailyViewState extends State<DailyView> {
             ),
           ),
           ListTile(
-            title: Text('Settings'),
-            leading: Icon(Icons.settings),
-            onTap: () {
-              // TODO: Update App State
-              //Navigator.pushNamed(context, '/Settings');
-            },
-          ),
-          ListTile(
             title: Text('Add Task'),
             leading: Icon(Icons.add),
             onTap: () async {
@@ -177,6 +169,22 @@ class _DailyViewState extends State<DailyView> {
             onTap: () {
               // TODO: Update App State
               Navigator.pushNamed(context, '/AllTasksView');
+            },
+          ),
+          ListTile(
+            title: Text('All Courses'),
+            leading: Icon(Icons.school),
+            onTap: () {
+              // TODO: Update App State
+              Navigator.pushNamed(context, '/AllCourseView');
+            },
+          ),
+          ListTile(
+            title: Text('Settings'),
+            leading: Icon(Icons.settings),
+            onTap: () {
+              // TODO: Update App State
+              //Navigator.pushNamed(context, '/Settings');
             },
           ),
         ],
@@ -273,8 +281,12 @@ class _DailyViewState extends State<DailyView> {
 
         floatingActionButton: FloatingActionButton(
           //onPressed: () => (),
-          tooltip: 'Switch view',
-          child: Icon(Icons.calendar_today),
+          tooltip: 'Add task',
+          child: Icon(Icons.add),
+          onPressed: () async {
+            await Navigator.pushNamed(context, '/AddTaskView');
+            setState(() {});
+          },
         ),
         bottomSheet: Row(
           mainAxisAlignment: MainAxisAlignment.center,

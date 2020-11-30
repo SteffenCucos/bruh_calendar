@@ -8,14 +8,16 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'dart:math';
 
 
-class AllTasksView extends StatefulWidget {
-  AllTasksView({Key key, this.events, this.tasks}) : super(key: key);
+
+
+class AllCourseView extends StatefulWidget {
+  AllCourseView({Key key, this.events, this.tasks}) : super(key: key);
 
   final List<Event> events;
   final List<Meeting> tasks;
 
   @override
-  _AllTasksView createState() => _AllTasksView();
+  _AllCourseView createState() => _AllCourseView();
 }
 
 
@@ -28,30 +30,41 @@ class UniqueColorGenerator {
 }
 
 
-class _AllTasksView extends State<AllTasksView> {
+class _AllCourseView extends State<AllCourseView> {
 
   List<Container> getTasks() {
     List<Container> tasks = [];
+    String newkey;
 
     var taskMap = new Map();
 
     for(Meeting e in widget.tasks) {
       String key = e.eventName;
 
-      if(!taskMap.containsKey(key)) {
-        taskMap[key] = new Map();
-        taskMap[key]["totalHours"] = 0;
-        taskMap[key]["completedHours"] = 0;
+      if (key.contains(' ')) {
+        String tempkey = key;
+        newkey = tempkey.split(" ")[0];
+      }
+      else {
+        newkey = key;
       }
 
-      taskMap[key]["totalHours"] += e.duration;
+
+      if(!taskMap.containsKey(newkey)) {
+        taskMap[newkey] = new Map();
+        taskMap[newkey]["totalHours"] = 0;
+        taskMap[newkey]["completedHours"] = 0;
+      }
+
+      taskMap[newkey]["totalHours"] += e.duration;
       if(e.complete) {
-        taskMap[key]["completedHours"] += e.duration;
+        taskMap[newkey]["completedHours"] += e.duration;
       }
     }
 
     taskMap.forEach((key, value) {
       double percent = value["completedHours"]/value["totalHours"];
+
 
       tasks.add(
           Container(
