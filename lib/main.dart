@@ -1,3 +1,4 @@
+import 'package:bruh_calendar/allCourseView.dart';
 import 'package:bruh_calendar/dailyView.dart';
 import 'package:bruh_calendar/settingsView.dart';
 import 'package:bruh_calendar/splash.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         '/SettingsView' : (BuildContext context) => SettingsView(),
         '/AddTaskView' : (BuildContext context) => AddTaskView(events: events, tasks: tasks),
         '/AllTasksView' : (BuildContext context) => AllTasksView(events: events, tasks: tasks),
+        '/AllCourseView' : (BuildContext context) => AllCourseView(events: events, tasks: tasks),
       },
     );
   }
